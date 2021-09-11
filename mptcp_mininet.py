@@ -15,6 +15,8 @@ from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.log import setLogLevel
 from mininet.cli import CLI
+
+from threading import Timer
 "congestion controls:"
 #os.system('sysctl -w net.ipv4.tcp_congestion_control=cubic ')
 #os.system('modprobe mptcp_coupled && sysctl -w net.ipv4.tcp_congestion_control=lia ')
@@ -40,6 +42,32 @@ from mininet.cli import CLI
 
 max_queue_size = 100
 
+def updateLink(link, delay):
+    link.intf1.config(delay=delay)
+    link.intf2.config(delay=delay)
+
+def updateDelay(link):    
+    # global cnt
+    # if cnt*5+1 > 5731:
+    #     return
+    delay = 0
+    Timer(5, updateDelay).start()
+    # now = datetime.datetime.now()
+    # print('the '+ str(cnt) + ' is running')
+    # ts = now.strftime('%Y-%m-%d %H:%M:%S')
+    # line = f'{ts}'
+    # print(line)
+    # filename = '../StarLink/delay/' + str(cnt*40+1) + '.mat'
+    # mat = loadmat(filename)
+    # delay = mat['delay']
+    # for i in range(num_orbit):
+    #     for j in range(sat_per_orbit):
+    #         num_sat1 = i*sat_per_orbit+j
+    #         num_sat2 = i*sat_per_orbit+(j+1)%sat_per_orbit 
+    #         num_sat3 = ((i+1)%num_orbit)*sat_per_orbit + j
+    updateLink(link, delay)
+    updateLink(link, delay)
+    # cnt = cnt + 1
 
 def multiPathSetting():
     net = Mininet(cleanup=True)
